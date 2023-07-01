@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model authme {
+  id         Int     @id @default(autoincrement()) @db.UnsignedMediumInt
+  username   String  @unique(map: "username") @db.VarChar(255)
+  realname   String  @db.VarChar(255)
+  password   String  @db.VarChar(255)
+  ip         String? @db.VarChar(40)
+  lastlogin  BigInt?
+  x          Float   @default(0)
+  y          Float   @default(0)
+  z          Float   @default(0)
+  world      String  @default("world") @db.VarChar(255)
+  regdate    BigInt  @default(0)
+  regip      String? @db.VarChar(40)
+  yaw        Float?  @db.Float
+  pitch      Float?  @db.Float
+  email      String? @db.VarChar(255)
+  isLogged   Int     @default(0) @db.SmallInt
+  hasSession Int     @default(0) @db.SmallInt
+  totp       String? @db.VarChar(32)
+}
+
+model players {
+  id           Int     @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  nick         String  @unique(map: "nick_UNIQUE") @db.VarChar(30)
+  uid          String  @db.VarChar(42)
+  time         Int     @default(0)
+  kills        Int     @default(0)
+  deaths       Int     @default(0)
+  ore          Int     @default(0)
+  joinTime     Int     @default(0)
+  invited      Boolean @default(dbgenerated("(b'0')")) @db.Bit(1)
+  inviteAmount Int     @default(0)
+  invitedBy    String  @default("#") @db.VarChar(45)
+  votes        Int     @default(0)
+  points       Int     @default(0)
+  votemodif    Float?  @default(1)
+}
+
+model plot_members {
+  id     Int     @id @default(autoincrement())
+  member String? @db.VarChar(48)
+  plot   String? @db.VarChar(48)
+}
+
+model plots {
+  uid           String  @id @db.VarChar(48)
+  owner         String  @db.VarChar(48)
+  name          String  @db.VarChar(64)
+  world         String  @db.VarChar(48)
+  topX          Float   @db.Float
+  topY          Float   @db.Float
+  botX          Float   @db.Float
+  botY          Float   @db.Float
+  level         Int     @default(1)
+  formattedName String? @db.VarChar(128)
+  icon          String? @db.VarChar(1024)
+  spawnX        Float?  @db.Float
+  spawnY        Float?  @db.Float
+  spawnZ        Float?  @db.Float
+}
+
+model sessions {
+  id      Int    @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  login   String @db.VarChar(45)
+  session String @db.VarChar(128)
+}
